@@ -47,3 +47,9 @@ footer {
     margin-top: 500px;
     text-align: center;
 }
+
+#qForm {
+    display: flex;
+    justify-content: center;
+    left: 15px;
+}
