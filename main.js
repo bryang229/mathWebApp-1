@@ -5,6 +5,7 @@ let problem = document.getElementById("problem");
 let modeSelected = false;
 var points = 0;
 var answer;
+var qMode = "";
 
 /* iframe.src = "https://baldis-basics-in-education-and-learning.fandom.com/wiki/File:BAL_Praise5.ogg?embedplayer=yes";
         document.body.appendChild(iframe)
@@ -43,6 +44,7 @@ const transitionPage = (mode) => {
         }
         diffText.innerText = `Difficulty chosen: ${mode}`;
         makeQLayout(mode);
+        qMode = mode;
     } else {
         let lazyArr = document.querySelectorAll(".homePage");
         let diffText = document.getElementById("diffText")
@@ -88,7 +90,6 @@ const makeQLayout = (mode) => {
     problem.appendChild(response);
     problem.appendChild(question);
     problem.appendChild(form);
-
     if (mode == "easy") {
         easyMode();
     } else if (mode == "medium") {
@@ -118,7 +119,7 @@ const easyMode = () => {
     answer = getSimpleAnswer(a, b, operand);
 }
 
-const decodeOperand = (operand) => {
+function decodeOperand(operand) {
     if (operand == 1)
         return "+"
     else if (operand == 2)
@@ -141,77 +142,102 @@ const mediumMode = () => {
     let operand2 = Math.floor(Math.random() * 3) + 1;
     let operand3 = Math.floor(Math.random() * 3) + 1;
 
+    //this checks for * to make sure pemdas works
+
     if (operand == 3 && operand2 == 3 && operand3 == 3) {
         sumA = getSimpleAnswer(a, b, 3);
         sumB = getSimpleAnswer(sumA, c, 3);
         sumC = getSimpleAnswer(sumB, d, 3);
+        console.log(3, 3, 3)
     } else if (operand == 3 && operand2 == 3 && operand3 != 3) {
         sumA = getSimpleAnswer(a, b, 3);
         sumB = getSimpleAnswer(sumA, c, 3);
-        sumC = getSimpleAnswer(sumB, d, oeprand3);
+        sumC = getSimpleAnswer(sumB, d, operand3);
+        console.log(3, 3, 0)
     } else if (operand == 3 && operand2 != 3 && operand3 == 3) {
         sumA = getSimpleAnswer(a, b, 3);
         sumB = getSimpleAnswer(c, d, 3);
         sumC = getSimpleAnswer(sumA, sumB);
+        console.log(3, 0, 3)
     } else if (operand != 3 && operand2 == 3 & operand3 == 3) {
         sumA = getSimpleAnswer(b, c, 3);
         sumB = getSimpleAnswer(sumA, d, 3);
-        sumC = getSimpleAnswer(a, sumB, operand1);
+        sumC = getSimpleAnswer(a, sumB, operand);
+        console.log(0, 3, 3)
     } else if (operand == 3 && operand2 != 3 && operand3 != 3) {
         sumA = getSimpleAnswer(a, b, 3);
         sumB = getSimpleAnswer(sumA, c, operand2);
         sumC = getSimpleAnswer(sumB, d, operand3);
+        console.log(3, 0, 0);
     } else if (operand != 3 && operand2 == 3 && operand3 != 3) {
-        sumA = getSimpleAnswer(b, c, 3);
-        sumB = getSimpleAnswer(a, sumB, operand);
+        sumA = getSimpleAnswer(a, b, 3);
+        sumB = getSimpleAnswer(sumA, c, operand);
         sumC = getSimpleAnswer(sumB, d, operand3);
+        console.log(0, 3, 0)
     } else if (operand != 3 && operand2 != 3 && operand3 == 3) {
         sumA = getSimpleAnswer(c, d, 3);
         sumB = getSimpleAnswer(a, b, operand);
         sumC = getSimpleAnswer(sumB, sumA, operand2);
+        console.log(0, 0, 3);
+    } else {
+        sumA = getSimpleAnswer(a, b, operand);
+        sumB = getSimpleAnswer(sumA, c, operand2);
+        sumC = getSimpleAnswer(sumB, d, operand3);
+        console.log(0, 0, 0);
     }
     console.log(a, b, c, d, operand, operand2, operand3)
     answer = sumC
 
-
-    //lemme think of this logic for a minute
     qElement.innerText = `${a} ${decodeOperand(operand)} ${b} ${decodeOperand(operand2)} ${c} ${decodeOperand(operand3)} ${d} = ?`;
 
 }
 
 const hardMode = () => {
+    console.log("Hey")
     let qElement = document.getElementById("question");
     let a = Math.floor(Math.random() * 50) - 24;
     let b = Math.floor(Math.random() * 50) - 24;
+    let c = Math.floor(Math.random() * 50) - 24;
+    let sumA = 0;
+    let sumB = 0;
     //KEY: 1:+ 2:- 3:*
     let operand = Math.floor(Math.random() * 3) + 1;
-    console.log(operand)
-    if (operand == 1) {
-        qElement.innerHTML = `${a} + ${b} = ?`;
-        answer = a + b;
-    } else if (operand == 2) {
-        qElement.innerText = `${a} - ${b} = ?`;
-        answer = a - b;
-    } else if (operand == 3) {
-        qElement.innerText = `${a} * ${b} = ?`;
-        answer = a * b;
+    let operand2 = Math.floor(Math.random() * 3) + 1;
+    if (operand == 3 && operand2 == 3) {
+        sumA = getSimpleAnswer(a, b, 3);
+        sumB = getSimpleAnswer(sumA, c, 3);
+    } else if (operand != 3 && operand2 == 3) {
+        sumA = getSimpleAnswer(b, c, 3);
+        sumB = getSimpleAnswer(a, sumB, operand);
+    } else if (operand == 3 && operand2 != 3) {
+        sumA = getSimpleAnswer(a, b, 3);
+        sumB = getSimpleAnswer(sumA, c, operand2);
+    } else {
+        sumA = getSimpleAnswer(a, b, operand);
+        sumB = getSimpleAnswer(sumA, c, operand2);
     }
+    answer = sumB;
 
+    qElement = `${a} ${decodeOperand(operand)} ${b} ${decodeOperand(operand2)} ${c}`;
 }
 
 
 
-const showNextQuestion = (mode) => {
-    if (mode == "easy")
-        easyMode();
-    else if (mode == "medium")
-        mediumMode();
+const showNextQuestion = () => {
+    document.getElementById("response").remove();
+    document.getElementById("newBtn").remove();
+    document.getElementById("qForm").remove();
+
+    makeQLayout(qMode)
+
+
 }
 
 const displayNextBtn = (mode) => {
     let nextQuestionBtn = document.createElement("button");
     nextQuestionBtn.innerText = "Next Question";
-    nextQuestionBtn.style.margin = 'auto';
+    nextQuestionBtn.style.marginLeft = '45%';
+    nextQuestionBtn.id = "newBtn";
     nextQuestionBtn.addEventListener('click', (e) => {
         e.preventDefault();
         showNextQuestion(mode);
@@ -229,7 +255,6 @@ const checkAnswer = (e) => {
         points++;
         response.innerText = "GOOD JOB";
         displayNextBtn()
-        new Audio(url).play();
 
     } else {
         response.innerText = 'TRY AGAIN... YOU GOT THIS!';
