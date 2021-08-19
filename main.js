@@ -6,6 +6,14 @@ let modeSelected = false;
 var points = 0;
 var answer;
 
+/* iframe.src = "https://baldis-basics-in-education-and-learning.fandom.com/wiki/File:BAL_Praise5.ogg?embedplayer=yes";
+        document.body.appendChild(iframe)
+            // width = "180"
+            // height = "20"
+            // frameborder = "0"
+            // webkitAllowFullScreen mozallowfullscreen allowFullScreen > < /iframe>*/
+
+
 const hideNavBtns = (id) => {
     //this uses tenary to change the mode selected to the opposite so false -> true and vice versa
     modeSelected = modeSelected ? false : true;
@@ -24,6 +32,7 @@ const hideNavBtns = (id) => {
     }
     transitionPage(id);
 }
+
 
 const transitionPage = (mode) => {
     if (modeSelected) {
@@ -46,6 +55,7 @@ const transitionPage = (mode) => {
         diffText.innerText = "";
     }
 }
+
 
 const makeQLayout = (mode) => {
     let form = document.createElement('form');
@@ -79,64 +89,93 @@ const makeQLayout = (mode) => {
     problem.appendChild(question);
     problem.appendChild(form);
 
-    if (mode == "easy")
+    if (mode == "easy") {
         easyMode();
-    else if (mode == "medium") {}
-    //let questionsJson = mediumMode();
-    else if (mode == "hard") {}
-    // let questionsJson = hardMode();
+    } else if (mode == "medium") {
+        mediumMode();
+    } else if (mode == "hard") {
+        hardMode();
+    }
+}
+
+const getSimpleAnswer = (a, b, operand) => {
+    if (operand == 1)
+        return a + b;
+    else if (operand == 2)
+        return a - b;
+    else if (operand == 3)
+        return a * b;
 }
 
 const easyMode = () => {
     let qElement = document.getElementById("question");
     let a = Math.floor(Math.random() * 50) - 24;
-    let b = Math.floor(Math.random() * 50) - 24;
+    let b = Math.floor(Math.random() * 20) - 1;
     //KEY: 1:+ 2:- 3:*
     let operand = Math.floor(Math.random() * 3) + 1;
     console.log(operand)
-    if (operand == 1) {
-        qElement.innerHTML = `${a} + ${b} = ?`;
-        answer = a + b;
-    } else if (operand == 2) {
-        qElement.innerText = `${a} - ${b} = ?`;
-        answer = a - b;
-    } else if (operand == 3) {
-        qElement.innerText = `${a} * ${b} = ?`;
-        answer = a * b;
-    }
+    qElement.innerText = `${a} ${decodeOperand(operand)} ${b} = ?`;
+    answer = getSimpleAnswer(a, b, operand);
 }
 
-const checkAnswer = (e) => {
-    e.preventDefault();
-    let userAnswer = parseInt(document.getElementById("answer").value);
-    let response = document.getElementById("response");
-    if (userAnswer == answer) {
-        points++;
-        response.innerText = "GOOD JOB";
-    } else {
-        response.innerText = 'TRY AGAIN... YOU GOT THIS!';
-    }
-
-
+const decodeOperand = (operand) => {
+    if (operand == 1)
+        return "+"
+    else if (operand == 2)
+        return "-"
+    else if (operand == 3)
+        return "*"
 }
 
 const mediumMode = () => {
     let qElement = document.getElementById("question");
     let a = Math.floor(Math.random() * 50) - 24;
     let b = Math.floor(Math.random() * 50) - 24;
+    let c = Math.floor(Math.random() * 50) - 24;
+    let d = Math.floor(Math.random() * 50) - 24;
+    let sumA = 0;
+    let sumB = 0;
+    let sumC = 0;
     //KEY: 1:+ 2:- 3:*
     let operand = Math.floor(Math.random() * 3) + 1;
-    console.log(operand)
-    if (operand == 1) {
-        qElement.innerHTML = `${a} + ${b} = ?`;
-        answer = a + b;
-    } else if (operand == 2) {
-        qElement.innerText = `${a} - ${b} = ?`;
-        answer = a - b;
-    } else if (operand == 3) {
-        qElement.innerText = `${a} * ${b} = ?`;
-        answer = a * b;
+    let operand2 = Math.floor(Math.random() * 3) + 1;
+    let operand3 = Math.floor(Math.random() * 3) + 1;
+
+    if (operand == 3 && operand2 == 3 && operand3 == 3) {
+        sumA = getSimpleAnswer(a, b, 3);
+        sumB = getSimpleAnswer(sumA, c, 3);
+        sumC = getSimpleAnswer(sumB, d, 3);
+    } else if (operand == 3 && operand2 == 3 && operand3 != 3) {
+        sumA = getSimpleAnswer(a, b, 3);
+        sumB = getSimpleAnswer(sumA, c, 3);
+        sumC = getSimpleAnswer(sumB, d, oeprand3);
+    } else if (operand == 3 && operand2 != 3 && operand3 == 3) {
+        sumA = getSimpleAnswer(a, b, 3);
+        sumB = getSimpleAnswer(c, d, 3);
+        sumC = getSimpleAnswer(sumA, sumB);
+    } else if (operand != 3 && operand2 == 3 & operand3 == 3) {
+        sumA = getSimpleAnswer(b, c, 3);
+        sumB = getSimpleAnswer(sumA, d, 3);
+        sumC = getSimpleAnswer(a, sumB, operand1);
+    } else if (operand == 3 && operand2 != 3 && operand3 != 3) {
+        sumA = getSimpleAnswer(a, b, 3);
+        sumB = getSimpleAnswer(sumA, c, operand2);
+        sumC = getSimpleAnswer(sumB, d, operand3);
+    } else if (operand != 3 && operand2 == 3 && operand3 != 3) {
+        sumA = getSimpleAnswer(b, c, 3);
+        sumB = getSimpleAnswer(a, sumB, operand);
+        sumC = getSimpleAnswer(sumB, d, operand3);
+    } else if (operand != 3 && operand2 != 3 && operand3 == 3) {
+        sumA = getSimpleAnswer(c, d, 3);
+        sumB = getSimpleAnswer(a, b, operand);
+        sumC = getSimpleAnswer(sumB, sumA, operand2);
     }
+    console.log(a, b, c, d, operand, operand2, operand3)
+    answer = sumC
+
+
+    //lemme think of this logic for a minute
+    qElement.innerText = `${a} ${decodeOperand(operand)} ${b} ${decodeOperand(operand2)} ${c} ${decodeOperand(operand3)} ${d} = ?`;
 
 }
 
@@ -159,6 +198,46 @@ const hardMode = () => {
     }
 
 }
+
+
+
+const showNextQuestion = (mode) => {
+    if (mode == "easy")
+        easyMode();
+    else if (mode == "medium")
+        mediumMode();
+}
+
+const displayNextBtn = (mode) => {
+    let nextQuestionBtn = document.createElement("button");
+    nextQuestionBtn.innerText = "Next Question";
+    nextQuestionBtn.style.margin = 'auto';
+    nextQuestionBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showNextQuestion(mode);
+    })
+    document.querySelector("main").appendChild(nextQuestionBtn);
+}
+
+
+
+const checkAnswer = (e) => {
+    e.preventDefault();
+    let userAnswer = parseInt(document.getElementById("answer").value);
+    let response = document.getElementById("response");
+    if (userAnswer == answer) {
+        points++;
+        response.innerText = "GOOD JOB";
+        displayNextBtn()
+        new Audio(url).play();
+
+    } else {
+        response.innerText = 'TRY AGAIN... YOU GOT THIS!';
+    }
+}
+
+
+
 
 easyBtn.addEventListener('click', (e) => {
     e.preventDefault();
