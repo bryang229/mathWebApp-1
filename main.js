@@ -241,8 +241,8 @@ const hardMode = () => {
         sumC = getSimpleAnswer(sumB, d, operand3);
         console.log(3, 0, 0);
     } else if (operand != 3 && operand2 == 3 && operand3 != 3) {
-        sumA = getSimpleAnswer(a, b, 3);
-        sumB = getSimpleAnswer(sumA, c, operand);
+        sumA = getSimpleAnswer(b, c, 3);
+        sumB = getSimpleAnswer(a,sumA , operand);
         sumC = getSimpleAnswer(sumB, d, operand3);
         console.log(0, 3, 0)
     } else if (operand != 3 && operand2 != 3 && operand3 == 3) {
